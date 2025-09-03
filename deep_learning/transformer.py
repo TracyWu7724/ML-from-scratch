@@ -51,15 +51,6 @@ def subsequent_mask(size):
 class LayerNorm(nn.Module):
     """
     Layer normalization module.
-
-    x ──┐
-    │
-    ├─→ LayerNorm → Sublayer (Att / FFN) → Dropout ─┐
-    │                                               │
-    └──────────────────  Residual ──────────────────┼─→ output
-                                                    │
-                                                   ADD
-    Note: This implementation applies layer normalization before the sublayer (Pre-LN).
     """
     
     def __init__(self, features, eps=1e-6):
@@ -238,7 +229,13 @@ class SublayerConnection(nn.Module):
     Residual connection followed by layer norm.
     
     output = LayerNorm(x + Sublayer(x))
-    
+        x ──┐
+    │
+    ├─→ LayerNorm → Sublayer (Att / FFN) → Dropout ─┐
+    │                                               │
+    └──────────────────  Residual ──────────────────┼─→ output
+                                                    │
+                                                   ADD
     Note: This applies layer norm before the sublayer (Pre-LN),
     which is often more stable than Post-LN.
     """
